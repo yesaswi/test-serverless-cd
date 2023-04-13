@@ -40,3 +40,6 @@ jobs:
 
     - name: Apply Terraform changes
       run: terraform apply -auto-approve
+      env:
+        TF_VAR_project_id: '<your-gcp-project-id>'
+        TF_VAR_region_name: '<your-gcp-region>'

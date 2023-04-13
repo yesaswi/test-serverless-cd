@@ -9,13 +9,24 @@ terraform {
 
 provider "google" {
   credentials = file(var.credentials_file)
-  region  = "us-east1"
+  project = var.project_id
+  region  = var.region_name
 }
 
 variable "credentials_file" {
   type        = string
   description = "The path to the GCP service account key JSON file"
   default     = "sa_key.json"
+}
+
+variable "project_id" {
+  type        = string
+  description = "The GCP project ID"
+}
+
+variable "region_name" {
+  type        = string
+  description = "The GCP region name"
 }
 
 resource "random_id" "bucket_prefix" {
