@@ -15,11 +15,13 @@ jobs:
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
-
+    
     - name: Checkout source code
       uses: actions/checkout@v2
       with:
         repository: yesaswi/test-serverless-ci
+        ref: main
+        fetch-depth: 0
         path: source
     
     - name: Set up Google Cloud credentials
