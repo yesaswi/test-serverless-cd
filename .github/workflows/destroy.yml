@@ -1,0 +1,60 @@
+name: Destroy Terraform resources
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform-destroy:
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_region_name: ${{ secrets.GCP_REGION }}
+      TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Checkout source code
+      uses: actions/checkout@v3
+      with:
+        repository: yesaswi/test-serverless-ci
+        ref: main
+        fetch-depth: 0
+        path: source
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      working-directory: source
+      run: npm ci
+
+    - name: Run tests
+      working-directory: source
+      run: npm test
+    
+    - name: Run build
+      working-directory: source
+      run: npm run build
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Set up Google Cloud credentials
+      run: echo '${{ secrets.GCP_SA_KEY }}' > sa_key.json
+      env:
+        GOOGLE_CREDENTIALS: sa_key.json
+
+    - name: Initialize Terraform
+      run: terraform init
+
+    - name: Validate Terraform configuration
+      run: terraform validate
+
+    - name: Plan Terraform changes
+      run: terraform plan
+
+    - name: Destroy Terraform resources
+      run: terraform destroy -auto-approve
