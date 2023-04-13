@@ -11,13 +11,13 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/setup-terraform@v2
     
     - name: Checkout source code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: yesaswi/test-serverless-ci
         ref: main
