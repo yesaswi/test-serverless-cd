@@ -27,15 +27,15 @@ jobs:
         node-version: 18
 
     - name: Install dependencies
-      path: source
+      working-directory: source
       run: npm ci
 
     - name: Run tests
-      path: source
+      working-directory: source
       run: npm test
     
     - name: Run build
-      path: source
+      working-directory: source
       run: npm run build
     
     - name: Set up Terraform
