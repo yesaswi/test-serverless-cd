@@ -39,13 +39,21 @@ resource "google_storage_bucket" "bucket" {
   uniform_bucket_level_access = true
 }
 
+variable "create_zip" {
+  type        = bool
+  description = "Whether to create the source zip file or not"
+  default     = true
+}
+
 data "archive_file" "source_zip" {
+  count       = var.create_zip ? 1 : 0
   type        = "zip"
   source_dir  = "${path.module}/source/dist"
   output_path = "${path.module}/function-source.zip"
 }
 
 resource "google_storage_bucket_object" "object" {
+  count  = var.create_zip ? 1 : 0
   name   = "function-source.zip"
   bucket = google_storage_bucket.bucket.name
   source = data.archive_file.source_zip.output_path

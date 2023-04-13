@@ -23,13 +23,13 @@ jobs:
           GOOGLE_CREDENTIALS: sa_key.json
 
       - name: Initialize Terraform
-        run: terraform init
+        run: terraform init -var="create_zip=false"
 
       - name: Validate Terraform configuration
-        run: terraform validate
+        run: terraform validate -var="create_zip=false"
 
       - name: Plan Terraform changes
-        run: terraform plan
+        run: terraform plan -var="create_zip=false"
 
       - name: Destroy Terraform resources
-        run: terraform destroy -auto-approve
+        run: terraform destroy -auto-approve -var="create_zip=false"
