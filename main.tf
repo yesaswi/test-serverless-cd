@@ -45,7 +45,6 @@ resource "google_cloudfunctions2_function" "function" {
   name        = "function-v2"
   location    = "us-east1"
   description = "a new function"
-  trigger_http = true
 
   build_config {
     runtime     = "nodejs18"
