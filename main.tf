@@ -9,8 +9,18 @@ terraform {
 
 provider "google" {
   credentials = file(var.credentials_file)
-  project = "cyber-castle"
-  region  = "us-east1"
+  project = var.project_id
+  region  = var.region_name
+}
+
+variable "project_id" {
+  type        = string
+  description = "The GCP project ID"
+}
+
+variable "region_name" {
+  type        = string
+  description = "The GCP region name"
 }
 
 variable "credentials_file" {
