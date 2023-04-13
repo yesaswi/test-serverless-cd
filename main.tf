@@ -77,8 +77,8 @@ resource "google_cloudfunctions2_function" "function" {
 resource "google_cloudfunctions2_function_iam_binding" "allowUnauthenticated" {
   project = google_cloudfunctions2_function.function.project
   location = google_cloudfunctions2_function.function.location
-  service = google_cloudfunctions2_function.function.name
-  role = "roles/run.invoker"
+  cloud_function = google_cloudfunctions2_function.function.name
+  role = "roles/cloudfunctions.invoker"
   members = [
     "allUsers",
   ]
