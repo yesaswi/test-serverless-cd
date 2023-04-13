@@ -25,13 +25,13 @@ resource "random_id" "bucket_prefix" {
 
 resource "google_storage_bucket" "bucket" {
   name                        = "${random_id.bucket_prefix.hex}-gcf-source"
-  location                    = "US"
+  location                    = "us-east1"
   uniform_bucket_level_access = true
 }
 
 data "archive_file" "source_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/source"
+  source_dir  = "${path.module}/source/dist"
   output_path = "${path.module}/function-source.zip"
 }
 
