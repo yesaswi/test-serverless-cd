@@ -64,13 +64,11 @@ resource "google_cloudfunctions2_function" "function" {
   }
 }
 
-resource "google_cloudfunctions_function_iam_binding" "allow_unauthenticated" {
-  project    = google_cloudfunctions2_function.function.project
-  region     = google_cloudfunctions2_function.function.region
-  cloud_function = google_cloudfunctions2_function.function.name
-
-  role = "roles/cloudfunctions.invoker"
-
+resource "google_cloud_run_service_iam_binding" "function" {
+  project = google_cloudfunctions2_function.function.project
+  location = google_cloudfunctions2_function.function.location
+  service = google_cloudfunctions2_function.function.name
+  role = "roles/run.invoker"
   members = [
     "allUsers",
   ]
