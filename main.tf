@@ -7,6 +7,18 @@ terraform {
   }
 }
 
+provider "google" {
+  credentials = file(var.credentials_file)
+  project = var.project_id
+  region  = "us-east1"
+}
+
+variable "credentials_file" {
+  type        = string
+  description = "The path to the GCP service account key JSON file"
+  default     = "sa_key.json"
+}
+
 resource "random_id" "bucket_prefix" {
   byte_length = 8
 }
