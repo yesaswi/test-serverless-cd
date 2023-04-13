@@ -48,7 +48,7 @@ resource "google_cloudfunctions2_function" "function" {
 
   build_config {
     runtime     = "nodejs18"
-    entry_point = "helloHttp"
+    entry_point = "api"
     source {
       storage_source {
         bucket = google_storage_bucket.bucket.name
