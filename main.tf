@@ -45,12 +45,11 @@ resource "google_cloudfunctions2_function" "function" {
   name        = "function-v2"
   location    = "us-east1"
   description = "a new function"
+  trigger_http = true
 
   build_config {
     runtime     = "nodejs18"
     entry_point = "api"
-    allow-unauthenticated = true
-    trigger_http = true
     source {
       storage_source {
         bucket = google_storage_bucket.bucket.name
@@ -64,6 +63,18 @@ resource "google_cloudfunctions2_function" "function" {
     available_memory   = "256M"
     timeout_seconds    = 60
   }
+}
+
+resource "google_cloudfunctions_function_iam_binding" "allow_unauthenticated" {
+  project    = google_cloudfunctions2_function.function.project
+  region     = google_cloudfunctions2_function.function.region
+  cloud_function = google_cloudfunctions2_function.function.name
+
+  role = "roles/cloudfunctions.invoker"
+
+  members = [
+    "allUsers",
+  ]
 }
 
 output "function_uri" {
