@@ -5,6 +5,11 @@ terraform {
       version = ">= 4.34.0"
     }
   }
+  
+  backend "gcs" {
+    bucket = "test-serverless-terraform-state-bucket"
+    prefix = "terraform/state"
+  }
 }
 
 provider "google" {
