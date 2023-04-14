@@ -50,6 +50,9 @@ jobs:
 
     - name: Initialize Terraform
       run: terraform init
+    
+    - name: Select default Terraform Workspace
+      run: terraform workspace select default
 
     - name: Validate Terraform configuration
       run: terraform validate

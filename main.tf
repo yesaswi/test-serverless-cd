@@ -45,15 +45,17 @@ resource "google_storage_bucket" "bucket" {
 }
 
 data "archive_file" "source_zip" {
+  count       = terraform.workspace == "destroy" ? 0 : 1
   type        = "zip"
   source_dir  = "${path.module}/source/dist"
   output_path = "${path.module}/function-source.zip"
 }
 
 resource "google_storage_bucket_object" "object" {
+  count  = terraform.workspace == "destroy" ? 0 : 1
   name   = "function-source.zip"
   bucket = google_storage_bucket.bucket.name
-  source = data.archive_file.source_zip.output_path
+  source = data.archive_file.source_zip[0].output_path
 }
 
 resource "google_cloudfunctions2_function" "function" {
@@ -67,7 +69,7 @@ resource "google_cloudfunctions2_function" "function" {
     source {
       storage_source {
         bucket = google_storage_bucket.bucket.name
-        object = google_storage_bucket_object.object.name
+        object = google_storage_bucket_object.object[0].name
       }
     }
   }
