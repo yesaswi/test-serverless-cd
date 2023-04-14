@@ -34,6 +34,12 @@ variable "credentials_file" {
   default     = "sa_key.json"
 }
 
+variable "create_zip" {
+  type        = bool
+  description = "Whether to create the source zip file or not"
+  default     = true
+}
+
 resource "random_id" "bucket_prefix" {
   byte_length = 8
 }
@@ -45,14 +51,14 @@ resource "google_storage_bucket" "bucket" {
 }
 
 data "archive_file" "source_zip" {
-  count       = terraform.workspace == "destroy" ? 0 : 1
+  count       = var.create_zip ? 1 : 0
   type        = "zip"
   source_dir  = "${path.module}/source/dist"
   output_path = "${path.module}/function-source.zip"
 }
 
 resource "google_storage_bucket_object" "object" {
-  count  = terraform.workspace == "destroy" ? 0 : 1
+  count  = var.create_zip ? 1 : 0
   name   = "function-source.zip"
   bucket = google_storage_bucket.bucket.name
   source = data.archive_file.source_zip[0].output_path
@@ -69,7 +75,7 @@ resource "google_cloudfunctions2_function" "function" {
     source {
       storage_source {
         bucket = google_storage_bucket.bucket.name
-        object = google_storage_bucket_object.object[0].name
+        object = var.create_zip ? google_storage_bucket_object.object[0].name : ""
       }
     }
   }

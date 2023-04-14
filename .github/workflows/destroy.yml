@@ -9,6 +9,7 @@ jobs:
     env:
       TF_VAR_region_name: ${{ secrets.GCP_REGION }}
       TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+      TF_VAR_create_zip: false
       GOOGLE_APPLICATION_CREDENTIALS: sa_key.json
 
     steps:
@@ -23,9 +24,6 @@ jobs:
 
     - name: Initialize Terraform
       run: terraform init
-
-    - name: Create or Select destroy Terraform Workspace
-      run: terraform workspace select destroy || terraform workspace new destroy
 
     - name: Validate Terraform configuration
       run: terraform validate
